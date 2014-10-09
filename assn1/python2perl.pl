@@ -5,7 +5,7 @@
 #student id :z3447627
 
 
-#added @operators array to enhance variables detection in perlVar subroutine.
+#corrected matching regex for variable 
 
 
 #a array which stores all variables.
@@ -41,7 +41,7 @@ while ($line = <>) {
 	}
 	elsif($line =~ /[a-zA-Z0-9_]+.*=.* /){#normal assigning
 			#print"---------------------enter 6\n";
-			$line =~ s/([a-zA-Z0-9_]+)/\$$1/g ;
+			$line =~ s/([a-zA-Z0-9_]*[a-zA-Z]+[a-zA-Z0-9_]*)/\$$1/g ;
 			chomp $line;
 			print $line.';'."\n";
 	}
