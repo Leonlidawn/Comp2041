@@ -19,27 +19,32 @@ while ($line = <>) {
 	} 
 	elsif ($line =~ /^\s*#/ || $line =~ /^\s*$/ ) {
 		# Blank & comment lines can be passed unchanged
-		print"---------------------enter 1\n";
-		print $line."\n";
+		#print"---------------------enter 1\n";
+		print $line;
 	
 	} 
 	elsif ($line =~ /^\s*print\s*"(.*)"\s*$/) {#contains variable in ""
-			print"---------------------enter 2\n";
+			#print"---------------------enter 2\n";
 			print &perlPrintf ($line)."\n";
 	}
 	elsif ($line =~ /^\s*print\s*[^""]*r".*/){#printing raw string
-			print"---------------------enter 3\n";
+			#print"---------------------enter 3\n";
 			print &perlRawPrint($line)."\n";		
 	}
 	elsif ($line =~ /^\s*print\s*"(.*)"\s*$/) {#contains variable in ""
-			print"---------------------enter 4\n";
+			#print"---------------------enter 4\n";
 			print &perlPrintf($line)."\n";
 	}
 	elsif($line =~ /^\s*print\s/){#contains variable outside
-			print"---------------------enter 5\n";
+			#print"---------------------enter 5\n";
 			print &perlVarPrint($line)."\n";
 	}
-	elsif($line =~ /\d+.*=. /)
+	elsif($line =~ /[a-zA-Z0-9_]+.*=.* /){#normal assigning
+			#print"---------------------enter 6\n";
+			$line =~ s/([a-zA-Z0-9_]+)/\$$1/g ;
+			chomp $line;
+			print $line.';'."\n";
+	}
 	 else {
 	
 		# Lines we can't translate are turned into comments
@@ -58,8 +63,9 @@ sub perlVarPrint{
 
 sub perlRawPrint{
 	my $l = $_[0];
-	$l =~ s/\s+r"(.*)"/'$1\'/g;
-	return $l.'"\n"'."\n";
+	$l =~ s/\s+r"(.*)"/ '$1\'/g;
+	chomp $l;
+	return $l.'."\n";';
 }
 
 sub perlPrintf { #need to consider variables
